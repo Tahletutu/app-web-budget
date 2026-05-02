@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <meta name="description" content="Application budget PWA reliée à Google Sheets." />
+    <title>Budget PWA</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar card">
+        <div>
+          <p class="eyebrow">App budget</p>
+          <h1>Budget simple</h1>
+          <p class="muted">Ajoute une dépense ou un revenu, et le Google Sheet se met à jour.</p>
+        </div>
+        <button id="installBtn" class="ghost hidden" type="button">Installer</button>
+      </header>
+
+      <section class="card settings-card">
+        <div>
+          <h2>Connexion Google Sheets</h2>
+          <p class="muted">Colle ici l’URL de ton déploiement Google Apps Script.</p>
+        </div>
+        <div class="settings-row">
+          <input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" />
+          <button id="saveApiBtn" type="button">Enregistrer</button>
+          <button id="reloadBtn" type="button" class="ghost">Actualiser</button>
+        </div>
+        <p id="statusText" class="status">Configure l’URL pour commencer.</p>
+      </section>
+
+      <section class="summary-grid">
+        <article class="card stat-card">
+          <span>Solde total</span>
+          <strong id="totalBalance">0,00 €</strong>
+        </article>
+        <article class="card stat-card">
+          <span>Revenus du mois</span>
+          <strong id="monthIncome">0,00 €</strong>
+        </article>
+        <article class="card stat-card">
+          <span>Dépenses du mois</span>
+          <strong id="monthExpense">0,00 €</strong>
+        </article>
+        <article class="card stat-card">
+          <span>Opérations</span>
+          <strong id="transactionCount">0</strong>
+        </article>
+      </section>
+
+      <main class="layout">
+        <section class="card">
+          <div class="section-title">
+            <h2>Nouvelle opération</h2>
+            <div class="switch-group" role="tablist" aria-label="Type d'opération">
+              <button id="expenseTab" class="switch is-active" data-type="depense" type="button">Dépense</button>
+              <button id="incomeTab" class="switch" data-type="revenu" type="button">Revenu</button>
+            </div>
+          </div>
+
+          <form id="transactionForm" class="form-grid">
+            <input type="hidden" id="type" value="depense" />
+
+            <label>
+              <span>Montant</span>
+              <input id="amount" type="number" min="0" step="0.01" placeholder="0.00" required />
+            </label>
+
+            <label>
+              <span>Catégorie</span>
+              <input id="category" list="categoriesList" type="text" placeholder="Courses" required />
+              <datalist id="categoriesList"></datalist>
+            </label>
+
+            <label>
+              <span>Libellé</span>
+              <input id="label" type="text" placeholder="Ex: Carrefour" />
+            </label>
+
+            <label>
+              <span>Date</span>
+              <input id="date" type="date" required />
+            </label>
+
+            <label class="full-width">
+              <span>Notes</span>
+              <textarea id="notes" rows="3" placeholder="Optionnel"></textarea>
+            </label>
+
+            <button id="submitBtn" type="submit" class="primary full-width">Ajouter</button>
+          </form>
+        </section>
+
+        <section class="card">
+          <div class="section-title">
+            <h2>Dernières opérations</h2>
+            <span class="muted">Synchronisées avec le Sheet</span>
+          </div>
+          <div id="transactionsList" class="transactions-list empty-state">
+            Aucune donnée pour l’instant.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
